@@ -1,6 +1,7 @@
 package vn.fpoly.asm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +23,21 @@ private sanPhamService SPService;
 private userService userService;
 
 @GetMapping("/gioHangList")
-    public String gioHangList(Model model, @RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "5") int size) {
-    List<gioHangs> listGH = GHservice.getAllGioHangs();
-    model.addAttribute("listGH", listGH);
+public String gioHangList(Model model,
+                          @RequestParam(defaultValue = "0") int page,
+                          @RequestParam(defaultValue = "5") int size,
+                          @RequestParam(defaultValue = "") String keyword) {
+    Page<gioHangs> listGH = GHservice.searchGioHangs(keyword, page, size);
+
+    model.addAttribute("listGH", listGH.getContent());
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", listGH.getTotalPages());
+    model.addAttribute("keyword", keyword);
+
     model.addAttribute("listSP", SPService.getAllSanPham(page, size));
     model.addAttribute("listUser", userService.getAllUsers());
     model.addAttribute("gioHangs", new gioHangs());
+
     return "page/GioHang";
 }
 

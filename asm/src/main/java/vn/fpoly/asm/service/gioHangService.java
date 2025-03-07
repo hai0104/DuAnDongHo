@@ -1,6 +1,9 @@
 package vn.fpoly.asm.service;
 
         import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.data.domain.Page;
+        import org.springframework.data.domain.PageRequest;
+        import org.springframework.data.domain.Pageable;
         import org.springframework.stereotype.Service;
         import vn.fpoly.asm.model.gioHangs;
         import vn.fpoly.asm.repository.gioHangRepository;
@@ -28,5 +31,12 @@ public class gioHangService {
 
     public void deleteGHangById(int id) {
         gioHangRepository.deleteById(id);
+    }
+    public Page<gioHangs> searchGioHangs(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        if (keyword == null || keyword.isEmpty()) {
+            return gioHangRepository.findAll(pageable);
+        }
+        return gioHangRepository.findBySanphamTenSPContainingIgnoreCase(keyword, pageable);
     }
 }
