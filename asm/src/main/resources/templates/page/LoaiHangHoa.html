@@ -1,0 +1,48 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div>
+    <h3 th:if="${message}" class="alert alert-success" th:text="${message}" style="text-align: center"></h3>
+</div>
+<h1 style="text-align: center; margin-bottom: 30px">Danh sách loại hàng hóa</h1>
+<form th:action="@{/saveLoaiHH}" th:object="${loaisp}" method="post">
+    <input type="hidden" name="idLoai" th:field="*{idLoai}">
+    <div class="mb-3">
+        <label for="tenLoai" class="form-label">Tên loại hàng hóa</label>
+        <input type="text" id="tenLoai" name="tenLoai" th:field="*{tenLoai}" class="form-control" placeholder="Nhập tên loại sản phẩm!" required>
+    </div>
+    <div class="mb-3">
+        <label for="moTaLoai" class="form-label">Tên loại hàng hóa</label>
+        <input type="text" id="moTaLoai" name="moTa" th:field="*{moTa}" class="form-control" placeholder="Nhập mô tả loại sản phẩm!" required>
+    </div>
+    <button type="submit" class="btn btn-success">Thêm</button>
+</form>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id loại hàng hóa</th>
+        <th>Tên loại hàng hóa</th>
+        <th>Mô tả loại hàng hóa</th>
+        <th>Thao tác</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="lsp:${loaiList}">
+        <td th:text="${lsp.idLoai}"></td>
+        <td th:text="${lsp.tenLoai}"></td>
+        <td th:text="${lsp.moTa}"></td>
+        <td>
+            <a th:href="@{/editLoaiHH/{id}(id=${lsp.idLoai})}" class="btn btn-primary">Edit</a>
+            <a th:href="@{/deleteLoaiHH/{id}(id=${lsp.idLoai})}" class="btn btn-danger" onclick="return confirm('Bạn thực sụ muốn xóa?')">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
